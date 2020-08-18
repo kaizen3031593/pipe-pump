@@ -1,18 +1,22 @@
-import * as sns from '@aws-cdk/aws-sns';
-import * as subs from '@aws-cdk/aws-sns-subscriptions';
-import * as sqs from '@aws-cdk/aws-sqs';
+import * as lambda from '@aws-cdk/aws-lambda';
+import * as apigw from '@aws-cdk/aws-apigateway';
 import * as cdk from '@aws-cdk/core';
+import * as path from 'path';
 
 export class PipeStack extends cdk.Stack {
   constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const queue = new sqs.Queue(this, 'PipeQueue', {
-      visibilityTimeout: cdk.Duration.seconds(300)
+    const hello = new lambda.Function(this, 'GreetLambda', {
+      runtime: lambda.Runtime.NODEJS_12_X,
+      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')), // this.lambdaCode,
+      handler: 'hello.handler',
     });
 
-    const topic = new sns.Topic(this, 'PipeTopic');
-
-    topic.addSubscription(new subs.SqsSubscription(queue));
+    // Add API gateways for the lambda backend
+    new apigw.LambdaRestApi(this, 'Endpoint', {
+      description: 'first endpoint',
+      handler: hello,
+    });
   }
 }
