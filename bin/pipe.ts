@@ -5,6 +5,13 @@ import { CdkPipeline, SimpleSynthAction } from '@aws-cdk/pipelines';
 import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
 
+class MyApp extends Stage {
+  constructor(scope: Construct, id: string, props?: StageProps){
+    super(scope, id, props);
+
+    new PipeStack(this, 'Api Endpoint');
+  }
+}
 
 class MyPipelinestack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -28,6 +35,13 @@ class MyPipelinestack extends Stack {
         cloudAssemblyArtifact,
       })
     });
+
+    pipeline.addApplicationStage(new MyApp(this, 'Prod', {
+      env: {
+        account: '489318732371',
+        region: 'us-east-1',
+      }
+    }));
   }
 }
 
