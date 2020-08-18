@@ -9,7 +9,7 @@ export class PipeStack extends cdk.Stack {
 
     const hello = new lambda.Function(this, 'GreetLambda', {
       runtime: lambda.Runtime.NODEJS_12_X,
-      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')), // this.lambdaCode,
+      code: lambda.Code.fromAsset(path.join(__dirname, '../lambda')),
       handler: 'hello.handler',
     });
 

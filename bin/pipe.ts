@@ -9,7 +9,7 @@ class MyApp extends Stage {
   constructor(scope: Construct, id: string, props?: StageProps){
     super(scope, id, props);
 
-    new PipeStack(this, 'Api Endpoint');
+    new PipeStack(this, 'api-endpoint');
   }
 }
 
@@ -36,7 +36,7 @@ class MyPipelinestack extends Stack {
       })
     });
 
-    pipeline.addApplicationStage(new MyApp(this, 'Prod', {
+    pipeline.addApplicationStage(new MyApp(this, 'prod', {
       env: {
         account: '489318732371',
         region: 'us-east-1',
