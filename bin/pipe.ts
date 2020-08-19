@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import { Construct, SecretValue, Stage, Stack, StackProps, StageProps, App } from '@aws-cdk/core';
+import { Construct, SecretValue, Stage, Stack, StackProps, StageProps, App, CfnOutput } from '@aws-cdk/core';
 import { PipeStack } from '../lib/pipe-stack';
+import { CanaryStack } from '../lib/canary-stack';
 import { CdkPipeline, SimpleSynthAction } from '@aws-cdk/pipelines';
 import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
@@ -10,6 +11,14 @@ class MyApp extends Stage {
     super(scope, id, props);
 
     new PipeStack(this, 'api-endpoint');
+  }
+}
+
+class MyTest extends Stage {
+  constructor(scope: Construct, id: string, props?: StageProps){
+    super(scope, id, props);
+
+    new CanaryStack(this, 'test-endpoint');
   }
 }
 
@@ -34,9 +43,16 @@ class MyPipelinestack extends Stack {
         sourceArtifact,
         cloudAssemblyArtifact,
       })
-    });
+    });  
 
     pipeline.addApplicationStage(new MyApp(this, 'prod', {
+      env: {
+        account: '489318732371',
+        region: 'us-east-1',
+      }
+    }));
+
+    pipeline.addApplicationStage(new MyTest(this, 'test', {
       env: {
         account: '489318732371',
         region: 'us-east-1',

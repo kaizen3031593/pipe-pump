@@ -22,6 +22,8 @@
   },
   "dependencies": {
     "@aws-cdk/aws-lambda": "1.59.0",
+    "@aws-cdk/aws-cloudwatch": "1.59.0",
+    "@aws-cdk/aws-cloudwatch-actions": "1.59.0",
     "@aws-cdk/aws-synthetics": "1.59.0",
     "@aws-cdk/aws-apigateway": "^1.59.0",
     "@aws-cdk/core": "1.59.0",

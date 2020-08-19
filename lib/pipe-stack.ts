@@ -18,5 +18,6 @@ export class PipeStack extends cdk.Stack {
       description: 'first endpoint',
       handler: hello,
     });
+
   }
 }
