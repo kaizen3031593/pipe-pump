@@ -3,8 +3,7 @@ import * as cloudwatch from '@aws-cdk/aws-cloudwatch';
 import * as cw_actions from '@aws-cdk/aws-cloudwatch-actions';
 import * as sns from '@aws-cdk/aws-sns';
 import * as cdk from '@aws-cdk/core';
-import { SnsAction } from '@aws-cdk/aws-cloudwatch-actions';
-
+import * as path from 'path';
 
 export class CanaryStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -12,7 +11,7 @@ export class CanaryStack extends cdk.Stack {
 
     const canary = new synthetics.Canary(this, 'test-pipeline', {
       test: synthetics.Test.custom({
-        code: synthetics.Code.fromInline('foo'),
+        code: synthetics.Code.fromAsset(path.join(__dirname, '../canary')),
         handler: 'index.handler',
       }),
       schedule: synthetics.Schedule.once(),
