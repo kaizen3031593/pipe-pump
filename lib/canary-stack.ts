@@ -12,7 +12,7 @@ export class CanaryStack extends cdk.Stack {
     const canary = new synthetics.Canary(this, 'test-pipeline', {
       test: synthetics.Test.custom({
         code: synthetics.Code.fromAsset(path.join(__dirname, '../canary')),
-        handler: 'index.handler',
+        handler: 'canary.handler',
       }),
       schedule: synthetics.Schedule.once(),
     });
