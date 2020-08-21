@@ -1,15 +1,13 @@
-# Welcome to your CDK TypeScript project!
+# Welcome to Pipe Pump
 
-You should explore the contents of this project. It demonstrates a CDK app with an instance of a stack (`PipeStack`)
-which contains an Amazon SQS queue that is subscribed to an Amazon SNS topic.
+This is my practice with CDK Pipelines along with the new CDK CloudWatch Synthetics module, introduced in version 1.59.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+To use, you must be signed in to your AWS account and have followed `bootstrapping` instructions [here](https://github.com/aws/aws-cdk/tree/master/packages/%40aws-cdk/pipelines#cdk-environment-bootstrapping).
 
-## Useful commands
+Make sure you follow the `initial pipeline deployment` instructions [here](https://github.com/aws/aws-cdk/tree/master/packages/%40aws-cdk/pipelines#initial-pipeline-deployment).
 
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `npm run test`    perform the jest unit tests
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk synth`       emits the synthesized CloudFormation template
+The general structure of the pipeline is Source -> Build -> Update Pipeline -> Assets -> Sandbox -> Test -> Prod
+
+This project uses the AWS CDK, along with AWS CodePipeline, AWS Lambda, AWS ApiGateway, AWS CloudWatch Synthetics, and AWS Simple Notification Service.
+
+Happy piping!
