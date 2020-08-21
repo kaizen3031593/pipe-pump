@@ -6,6 +6,10 @@ import { CdkPipeline, SimpleSynthAction } from '@aws-cdk/pipelines';
 import * as codepipeline from '@aws-cdk/aws-codepipeline';
 import * as codepipeline_actions from '@aws-cdk/aws-codepipeline-actions';
 
+const awsAccount = '489318732371';
+const githubUsername = 'kaizen3031593';
+const githubRepo = 'pipe-pump';
+
 class MyApp extends Stage {
   constructor(scope: Construct, id: string, props?: StageProps){
     super(scope, id, props);
@@ -22,6 +26,14 @@ class MyTest extends Stage {
   }
 }
 
+class MyProdApp extends Stage {
+  constructor(scope: Construct, id: string, props?: StageProps){
+    super(scope, id, props);
+
+    new PipeStack(this, 'prod-endpoint');
+  }
+}
+
 class MyPipelinestack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -29,15 +41,15 @@ class MyPipelinestack extends Stack {
     const sourceArtifact = new codepipeline.Artifact();
     const cloudAssemblyArtifact = new codepipeline.Artifact();
 
-    const pipeline = new CdkPipeline(this, "Pipeline", {
+    const pipeline = new CdkPipeline(this, 'Pipeline', {
       pipelineName: 'TestPipeline',
       cloudAssemblyArtifact,
       sourceAction: new codepipeline_actions.GitHubSourceAction({
-        actionName: "GitHub",
+        actionName: 'GitHub',
         output: sourceArtifact,
         oauthToken: SecretValue.secretsManager('GithubToken'),
-        owner: "kaizen3031593",
-        repo: "pipe-pump",
+        owner: githubUsername,
+        repo: githubRepo,
       }),
       synthAction: SimpleSynthAction.standardNpmSynth({
         sourceArtifact,
@@ -45,16 +57,23 @@ class MyPipelinestack extends Stack {
       })
     });  
 
-    pipeline.addApplicationStage(new MyApp(this, 'prod', {
+    pipeline.addApplicationStage(new MyApp(this, 'Sandbox', {
       env: {
-        account: '489318732371',
+        account: awsAccount,
         region: 'us-east-1',
       }
     }));
 
-    pipeline.addApplicationStage(new MyTest(this, 'test', {
+    pipeline.addApplicationStage(new MyTest(this, 'Test', {
       env: {
-        account: '489318732371',
+        account: awsAccount,
+        region: 'us-east-1',
+      }
+    }));
+
+    pipeline.addApplicationStage(new MyProdApp(this, 'Prod', {
+      env: {
+        account: awsAccount,
         region: 'us-east-1',
       }
     }));
@@ -64,7 +83,7 @@ class MyPipelinestack extends Stack {
 const app = new App();
 new MyPipelinestack(app, 'PipelineStack', {
   env: {
-    account: '489318732371',
+    account: awsAccount,
     region: 'us-east-1',
   }
 });
